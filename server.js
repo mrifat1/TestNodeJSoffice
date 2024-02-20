@@ -13,17 +13,17 @@
 //     });
 //   }
 
+// var data = [
+//   {
+//       name: 'Tallykhata',
+//       address: 'Banani'
+//   },
+//   {
+//       name: "Softinzo",
+//       address: "Badda"
+//   }
+// ]
 let dataFromUser = 'softinzo'
-  var data = [
-    {
-        name: 'Tallykhata',
-        address: 'Banani'
-    },
-    {
-        name: "Softinzo",
-        address: "Badda"
-    }
-  ]
 //   var sql ="INSERT INTO customers (name,address) VALUES ?";
   var sql ="SELECT * from customers WHERE name = ?";
   mysqlConnection.query(sql,[dataFromUser], function (err, result) {
