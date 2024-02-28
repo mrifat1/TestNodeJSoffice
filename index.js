@@ -1,20 +1,27 @@
-const connection = require('./demo_db_connection')
-const express = require('express')
-const bodyParser = require('body-parser')
-const myModule = require('./query')
+const express = require('express'),
+    app = express(),
+    bodyparser = require('body-parser');
+// require('express-async-errors')
 
-var app = express()
+const db = require('./demo_db_connection'),
+    employeeRoutes = require('./controllers/employee.controller')
 
-app.use(bodyParser.json())
 
-app.listen(3000, ()=> console.log('Express server is running at port 3000'))
-
-app.get('/customers',(req,res)=>{
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    console.log('fullUrl', fullUrl)
-    console.log('request',req.query,req.params);
-    let paramName = req.params.id
-    let queryName = req.query.name
-    
+//middleware
+app.use(bodyparser.json())
+app.use('/api/employees', employeeRoutes)
+app.use((err, req, res, next) => {
+    console.log(err)
+    res.status(err.status || 500).send('Something went wrong!')
 })
 
+
+//first make sure db connection is successful
+//then start the express server.
+db.query("SELECT 1")
+    .then(() => {
+        console.log('db connection  succeeded.')
+        app.listen(3000,
+            () => console.log('server started at 3000'))
+    })
+    .catch(err => console.log('db connection failed. \n' + err))
